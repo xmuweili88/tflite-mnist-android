@@ -7,8 +7,6 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nex3z.fingerpaintview.FingerPaintView;
-
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -18,7 +16,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    @BindView(R.id.fpv_paint) FingerPaintView mFpvPaint;
+    private FingerPaintView mFpvPaint;
     @BindView(R.id.tv_prediction) TextView mTvPrediction;
     @BindView(R.id.tv_probability) TextView mTvProbability;
     @BindView(R.id.tv_timecost) TextView mTvTimeCost;
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mFpvPaint = findViewById(R.id.fpv_paint);
         init();
     }
 
