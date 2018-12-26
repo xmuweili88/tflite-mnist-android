@@ -2,13 +2,14 @@ package com.nex3z.tflitemnist;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-
+import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,33 +30,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mFpvPaint = findViewById(R.id.fpv_paint);
+        mFpvPaint.addOnDrawCallBack(
+                ()->{
+                    Result result = predictResult();
+                    renderResult(result);
+                    },
+                Executors.newSingleThreadExecutor()
+        );
         init();
-    }
-
-    @OnClick(R.id.btn_detect)
-    void onDetectClick() {
-        if (mClassifier == null) {
-            Log.e(LOG_TAG, "onDetectClick(): Classifier is not initialized");
-            return;
-        } else if (mFpvPaint.isEmpty()) {
-            Toast.makeText(this, R.string.please_write_a_digit, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Bitmap image = mFpvPaint.exportToBitmap(
-                Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT);
-        // The model is trained on images with black background and white font
-        Bitmap inverted = ImageUtil.invert(image);
-        Result result = mClassifier.classify(inverted);
-        renderResult(result);
     }
 
     @OnClick(R.id.btn_clear)
     void onClearClick() {
         mFpvPaint.clear();
-        mTvPrediction.setText(R.string.empty);
-        mTvProbability.setText(R.string.empty);
-        mTvTimeCost.setText(R.string.empty);
     }
 
     private void init() {
@@ -67,11 +54,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void renderResult(Result result) {
-        mTvPrediction.setText(String.valueOf(result.getNumber()));
-        mTvProbability.setText(String.valueOf(result.getProbability()));
-        mTvTimeCost.setText(String.format(getString(R.string.timecost_value),
-                result.getTimeCost()));
+    @Nullable
+    private Result predictResult() {
+        if (mClassifier == null) {
+            Log.e(LOG_TAG, "onDetectClick(): Classifier is not initialized");
+            return null;
+        } else if (mFpvPaint.isEmpty()) {
+            return null;
+        }
+
+        Bitmap image = mFpvPaint.exportToBitmap(
+                Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT);
+        // The model is trained on images with black background and white font
+        Bitmap inverted = ImageUtil.invert(image);
+        return mClassifier.classify(inverted);
     }
 
+    private void renderResult(@Nullable Result result) {
+        if (result != null) {
+            mTvPrediction.setText(String.valueOf(result.getNumber()));
+            mTvProbability.setText(String.valueOf(result.getProbability()));
+            mTvTimeCost.setText(String.format(getString(R.string.timecost_value),
+                    result.getTimeCost()));
+        } else {
+            mTvPrediction.setText(R.string.empty);
+            mTvProbability.setText(R.string.empty);
+            mTvTimeCost.setText(R.string.empty);
+        }
+    }
 }

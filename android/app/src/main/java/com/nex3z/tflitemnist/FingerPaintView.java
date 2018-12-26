@@ -8,8 +8,13 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 public class FingerPaintView extends View {
 
@@ -23,7 +28,10 @@ public class FingerPaintView extends View {
     private Path drawPath = new Path();
     private float drawX = 0f;
     private float drawY = 0f;
-    private boolean isEmpty;
+    private boolean isEmpty = true;
+
+    // List of callbacks that invokes upon draw
+    private List<Pair<Runnable, Executor>> onDrawCallBack = new ArrayList<>();
 
     public FingerPaintView(Context context) {
         super(context);
@@ -48,6 +56,9 @@ public class FingerPaintView extends View {
         }
         canvas.drawBitmap(drawBitmap, 0, 0, drawPaint);
         canvas.drawPath(drawPath, pencil);
+        for (Pair<Runnable, Executor> callback : onDrawCallBack) {
+            callback.second.execute(callback.first);
+        }
     }
 
     @Override
@@ -96,7 +107,6 @@ public class FingerPaintView extends View {
     }
 
     public Bitmap exportToBitmap() {
-        drawPath.reset();
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Drawable bgDrawable = getBackground();
@@ -114,6 +124,10 @@ public class FingerPaintView extends View {
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap, width, height, false);
         rawBitmap.recycle();
         return scaledBitmap;
+    }
+
+    public void addOnDrawCallBack(Runnable runnable, Executor executor) {
+        onDrawCallBack.add(new Pair<>(runnable, executor));
     }
 
     private void onTouchDown(float x, float y) {

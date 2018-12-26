@@ -71,13 +71,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_detect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/detect"/>
-
-        <Button
             android:id="@+id/btn_clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
