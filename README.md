@@ -3,12 +3,12 @@
 This project demonstrates how to use [TensorFlow Lite](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/lite) on Android for handwritten digits classification from MNIST.
 
 <div align="center">
-  <img src="image/demo.gif" heigit="500"/>
+  <img src="image/demo.gif" heigit="300"/>
 </div>
 
 Prebuilt APK can be downloaded from [here](https://github.com/nex3z/tflite-mnist-android/releases/download/v1.0.0/tflite-mnist.apk).
 
-If you are interested in a [TensorFlow Mobile](https://www.tensorflow.org/mobile/mobile_intro) version, please refer to [tfmobile-mnist-android](https://github.com/nex3z/tfmobile-mnist-android).
+This project is an interactive version of [tflite-mnist-android](https://github.com/nex3z/tflite-mnist-android). The app keeps detection pipeline running in background and updates the prediction/probabbily in realtime.
 
 ## How to build from scratch
 
@@ -120,6 +120,7 @@ aaptOptions {
 
 ## Credits
 
+- The majority of the codes comes from [tflite-mnist-android](https://github.com/nex3z/tflite-mnist-android).
 - The basic model architecture comes from [tensorflow-mnist-tutorial](https://github.com/martin-gorner/tensorflow-mnist-tutorial).
 - The official TensorFlow Lite [Android demo](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/lite/java/demo/app).
 - The [FingerPaint](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/graphics/FingerPaint.java) from Android API demo.
