@@ -120,7 +120,7 @@ aaptOptions {
 
 ## Credits
 
-- The majority of the codes comes from [tflite-mnist-android](https://github.com/nex3z/tflite-mnist-android).
+- The majority of the code comes from [tflite-mnist-android](https://github.com/nex3z/tflite-mnist-android).
 - The basic model architecture comes from [tensorflow-mnist-tutorial](https://github.com/martin-gorner/tensorflow-mnist-tutorial).
 - The official TensorFlow Lite [Android demo](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/lite/java/demo/app).
 - The [FingerPaint](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/graphics/FingerPaint.java) from Android API demo.
